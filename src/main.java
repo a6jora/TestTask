@@ -19,7 +19,7 @@ public class main {
         public ListNode Tail;
         public int Count;
 
-        public void Serialize(FileOutputStream s) throws IOException {
+        public void Serialize(FileOutputStream s){
             ArrayList<ListNode> listNodes = new ArrayList<>();
             ListNode currentNode = Head;
             System.out.println(Head.data);
@@ -28,13 +28,18 @@ public class main {
                 currentNode = currentNode.Next;
             }
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(s));
-            for (ListNode node :
-                    listNodes) {
-                String indexOfRand = String.valueOf(listNodes.indexOf(node.Rand));
-                writer.write(node.data + "/" + indexOfRand+"\n");
+            try {
 
+                for (ListNode node :
+                        listNodes) {
+                    String indexOfRand = String.valueOf(listNodes.indexOf(node.Rand));
+                    writer.write(node.data + "/" + indexOfRand+"\n");
+
+                }
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            writer.close();
 
         }
 
