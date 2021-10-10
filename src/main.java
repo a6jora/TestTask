@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class main {
 
@@ -19,21 +20,24 @@ public class main {
         public ListNode Tail;
         public int Count;
 
-        public void Serialize(FileOutputStream s){
+        public void Serialize(FileOutputStream s) {
             ArrayList<ListNode> listNodes = new ArrayList<>();
+            HashMap<ListNode, Integer> mapWithIndex = new HashMap<>(); // new
             ListNode currentNode = Head;
             System.out.println(Head.data);
             for (int i = 0; i < Count; i++) {
                 listNodes.add(currentNode);
+                mapWithIndex.put(currentNode, i);  // new
                 currentNode = currentNode.Next;
             }
+
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(s));
             try {
 
                 for (ListNode node :
                         listNodes) {
-                    String indexOfRand = String.valueOf(listNodes.indexOf(node.Rand));
-                    writer.write(node.data + "/" + indexOfRand+"\n");
+                    String indexOfRand = String.valueOf(mapWithIndex.get(node.Rand)); // new
+                    writer.write(node.data + "/" + indexOfRand + "\n");
 
                 }
                 writer.close();
@@ -55,7 +59,7 @@ public class main {
                 while ((line = reader.readLine()) != null) {
                     System.out.println(line);
                     indexOfRand = line.lastIndexOf("/");
-                    randIndexList.add(Integer.parseInt(line.substring(indexOfRand+1)));
+                    randIndexList.add(Integer.parseInt(line.substring(indexOfRand + 1)));
 
                     ListNode currentNode = new ListNode();
                     currentNode.data = line.substring(0, indexOfRand);
@@ -110,21 +114,22 @@ public class main {
         FileInputStream fileInputStream = new FileInputStream("serials.txt");
         listRand.Deserialize(fileInputStream);
 
+        fileInputStream.close();
         ListNode currentNode = listRand.Head;
-        while (true){
+        while (true) {
             System.out.println("===");
             if (currentNode.Prev != null)
-                System.out.println(currentNode.Prev.data);
+                System.out.println("prev:" + currentNode.Prev.data);
             else {
                 System.out.println("null of head");
             }
-            System.out.println(currentNode.data);
-            System.out.println(((currentNode.Next!=null)?currentNode.Next.data:"null of tail"));
-            System.out.println(currentNode.Rand.data);
+            System.out.println("curr:" + currentNode.data);
+            System.out.println(((currentNode.Next != null) ? "nex:" + currentNode.Next.data : "null of tail"));
+            System.out.println("rand:" + currentNode.Rand.data);
             currentNode = currentNode.Next;
             if (currentNode == null) break;
         }
-        fileInputStream.close();
+//
 //        FileOutputStream fileOutputStream = new FileOutputStream("serials.txt");
 //        listRand.Serialize(fileOutputStream);
 //        fileOutputStream.close();
